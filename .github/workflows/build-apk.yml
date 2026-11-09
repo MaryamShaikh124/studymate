@@ -1,14 +1,13 @@
-
 name: Build StudyMate Release APK
 
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
+    tags:
+      - 'v*' # Triggers a public release whenever you push a version tag like v1.0.0
 
 permissions:
-  contents: read
+  contents: write # Crucial: Allows GitHub to create and write to the Releases page
 
 jobs:
   build:
@@ -18,23 +17,19 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: '21'
+          distribution: 'temurin'
+          java-version: '17' # Recommended stable Java version for Flutter Android builds
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: stable
-          flutter-version: '3.47.9'
+          channel: 'stable'
           cache: true
-
-      - name: Check Flutter version
-        run: flutter --version
 
       - name: Install dependencies
         run: flutter pub get
@@ -42,6 +37,7 @@ jobs:
       - name: Build release APK
         run: flutter build apk --release
 
+      # Optional: Keeps a temporary copy in the Actions tab logs
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
@@ -49,3 +45,12 @@ jobs:
           path: build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
           retention-days: 14
+
+      # NEW STEP: Publishes the APK directly to your GitHub Releases page
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/app/outputs/flutter-apk/app-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
