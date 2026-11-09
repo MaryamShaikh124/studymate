@@ -1,0 +1,2 @@
+E:/flutter/studymate/build/.cxx/debug/q1w1i6t4/arm64-v8a/CMakeFiles/edit_cache.dir
+E:/flutter/studymate/build/.cxx/debug/q1w1i6t4/arm64-v8a/CMakeFiles/rebuild_cache.dir

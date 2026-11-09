@@ -1,0 +1,7 @@
+# Machine-specific Android configuration
+/android/local.properties
+
+# Private Android signing credentials
+*.jks
+*.keystore
+key.properties
