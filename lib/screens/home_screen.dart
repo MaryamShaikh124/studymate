@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/study_task.dart';
 import '../services/firestore_service.dart';
 import 'add_task_screen.dart';
+import 'task_details_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -344,7 +345,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               else
                 ...tasks.map((task) {
-                  return Container(
+                  return InkWell(
+                    borderRadius: BorderRadius.circular(16),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TaskDetailsScreen(task: task),
+                        ),
+                      );
+                    },
+                    child: Container(
                     margin: const EdgeInsets.only(bottom: 12),
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
@@ -418,6 +429,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ],
+                    ),
                     ),
                   );
                 }),
